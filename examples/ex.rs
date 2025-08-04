@@ -1,7 +1,7 @@
-use json_ifc::ControlledAccess;
+use json_access_control::{AccessRoles, ControlledAccess, access_guard};
 use serde::Serialize;
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, AccessRoles)]
 enum Role {
     Privileged,
     Unprivileged,
@@ -14,6 +14,16 @@ struct Testing {
     #[access(Role::Privileged)]
     age: u32,
 }
+
+#[access_guard(Role::Privileged)]
+struct PrivilegedGuard;
+
+// #[check_controlled_access]
+// fn test_check_controlled_access(_: PrivilegedGuard) -> TestingPrivilegedAccessor {
+//     let file_contents: String = read_file();
+//     let privileged: TestingPrivilegedAccessor = serde_json::from_str(&file_contents).unwrap();
+//     return privileged;
+// }
 
 const FILE_PATH: &'static str = "testing_data.json";
 
@@ -36,7 +46,7 @@ fn main() {
     create_file();
 
     // read contents of ex file
-    let file_contents = read_file();
+    let file_contents: String = read_file();
 
     // parse into a privileged accessor - can access both fields
     let privileged: TestingPrivilegedAccessor = serde_json::from_str(&file_contents).unwrap();
