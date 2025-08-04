@@ -60,7 +60,7 @@ pub fn derive_controlled_access(input: TokenStream) -> TokenStream {
                     proc_macro2::Ident::new(&accessor_name, proc_macro2::Span::call_site());
 
                 quote! {
-                    #[derive(Debug, Clone)]
+                    #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
                     pub struct #accessor_name_ident {
                         #(#field_definitions)*
                     }
