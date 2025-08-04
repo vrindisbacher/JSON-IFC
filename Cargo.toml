@@ -1,5 +1,5 @@
 [package]
-name = "json-ifc"
+name = "json-access-control"
 version = "0.1.0"
 edition = "2024"
 
